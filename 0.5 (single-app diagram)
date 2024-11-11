@@ -1,0 +1,37 @@
+sequenceDiagram
+
+    participant browser
+    participant server
+
+    browser ->> server: GET https://studies.cs.helsinki.fi/exampleapp/spa
+    activate server
+    server -->> browser: HTML document for SPA
+    deactivate server
+
+    browser ->> server: GET https://studies.cs.helsinki.fi/exampleapp/main.css
+    activate server
+    server -->> browser: CSS File
+    deactivate server
+
+    browser ->> server: GET https://studies.cs.helsinki.fi/exampleapp/spa.js
+    activate server
+    server -->> browser: JavaScript File for SPA
+    deactivate server
+
+    Note right of browser: Browser executes JavaScript to handle user input and fetch notes
+
+    browser ->> server: GET https://studies.cs.helsinki.fi/exampleapp/data.json
+    activate server 
+    server -->> browser: [{ "content": "Note 1", "date": "2024-11-06T10:00:00Z" }, ... ]
+    deactivate server
+
+    Note right of browser: Bwoser renders the notes fetched
+    Note right of browser: User submits a new note using the form
+
+    browser ->> server: POST /new_note_spa (JSON)
+    activate server
+    Note right of browser: {"content": "This is a new note.", "date": "2024-11-06T10:30:00Z" }
+    server -->> browser: 201 Created (No redirect)
+    deactivate server
+
+    Note right of browser: Browser updates the note list without reloading
